@@ -1,25 +1,42 @@
-namespace AccountOwnerServer.Extensions
+using Contracts;
+using LoggerService;
+using Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace AccountOwnerServer.Extensions;
+
+public static class ServiceExtensions
 {
-    public static class ServiceExtensions
+    public static void ConfigureCors(this IServiceCollection services)
     {
-        public static void ConfigureCors(this IServiceCollection services)
+        services.AddCors(options =>
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .AllowAnyOrigin() // WithOrigins("domínio")
-                    .AllowAnyMethod() // WhithMethods("GET", "POST")
-                    .AllowAnyHeader() // WithHeaders("accept", "content-type")
-                );
-            });
-        }
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                .AllowAnyOrigin()  // WithOrigins("dominio")
+                .AllowAnyMethod()  // WithMethods("GET", "POST")
+                .AllowAnyHeader()  // WithHeaders("accept", "content-type")
+            );
+        });
+    }
 
-        public static void ConfigureIISIntegration(this IServiceCollection services)
+    public static void ConfigureIISIntegration(this IServiceCollection services)
+    {
+        services.Configure<IISOptions>(options =>
         {
-            services.Configure<IISOptions>(options => {
 
-            });
-        }
+        });
+    }
+
+    public static void ConfigureLoggerService(this IServiceCollection services)
+    {
+        services.AddSingleton<ILoggerManager, LoggerManager>();
+    }
+
+    // Código padrão para a conexão
+    public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+    {
+        var conn = config["mysqlconnection:connectionString"];
+        services.AddDbContext<RepositoryContext>(o => o.UseMySql(conn, ServerVersion.AutoDetect(conn)));
     }
 }
