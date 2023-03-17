@@ -1,6 +1,7 @@
 using NLog;
 using AccountOwnerServer.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+builder.Services.ConfigureRepositoryWrapper();
 
 var builder = WebApplication.CreateBuilder(args);
 
