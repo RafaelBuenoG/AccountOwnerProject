@@ -1,24 +1,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Entities.Models
+namespace Entities.Models;
+
+[Table("account")]
+public class Account
 {
-    [Table("account")]
-    public class Account
-    {
-        [Key]
-        [Column("AccountId")]
-        public Guid Id { get; set; }
+    [Column("AccountId")]
+    public Guid Id { get; set; }
 
-        [Required]
-        public DateTime DateCreated { get; set; }
+    [Required]
+    public DateTime DateCreated { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string AccountType { get; set; }
+    [Required]
+    public string AccountType { get; set; }
 
-        [ForeignKey(nameof(Owner))]
-        public Guid OwnerId { get; set; }
-        public Owner Owner { get; set; }
-    }
+    [ForeignKey(nameof(Owner))]
+    public Guid OwnerId { get; set; }
+    public Owner Owner { get; set; }
 }
